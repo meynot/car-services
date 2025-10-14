@@ -27,7 +27,7 @@ class InvoiceController extends Controller
      */
     public function create(): View
     {
-        $services = Service::all();
+        $services = Service::enabled()->get();
         return view('invoices.create', compact('services'));
     }
 
@@ -82,7 +82,7 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice): View
     {
-        $services = Service::all();
+        $services = Service::enabled()->get();
         $invoice->load('items');
         return view('invoices.edit', compact('invoice', 'services'));
     }

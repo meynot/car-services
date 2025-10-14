@@ -48,6 +48,24 @@
                                 ${{ number_format($service->price, 2) }}
                             </dd>
                         </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                {{ __('services.status') }}
+                            </dt>
+                            <dd class="mt-1">
+                                @if($service->enabled)
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                        <i class="fas fa-check-circle me-1"></i>
+                                        {{ __('services.enabled') }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
+                                        <i class="fas fa-times-circle me-1"></i>
+                                        {{ __('services.disabled') }}
+                                    </span>
+                                @endif
+                            </dd>
+                        </div>
                         <div class="md:col-span-2">
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">
                                 {{ __('services.description') }}

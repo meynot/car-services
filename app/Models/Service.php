@@ -14,10 +14,12 @@ class Service extends Model
         'name',
         'description',
         'price',
+        'enabled',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'enabled' => 'boolean',
     ];
 
     /**
@@ -26,5 +28,13 @@ class Service extends Model
     public function invoiceItems(): HasMany
     {
         return $this->hasMany(InvoiceItem::class);
+    }
+
+    /**
+     * Scope a query to only include enabled services.
+     */
+    public function scopeEnabled($query)
+    {
+        return $query->where('enabled', true);
     }
 }

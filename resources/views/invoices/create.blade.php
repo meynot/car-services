@@ -75,6 +75,7 @@
                                step="0.01" 
                                min="0"
                                value="{{ old('total_amount') }}"
+                               onbeforeinput="return false"
                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                required>
                         @error('total_amount')

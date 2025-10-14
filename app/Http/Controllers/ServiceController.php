@@ -35,6 +35,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'enabled' => 'boolean',
         ]);
 
         Service::create($validated);
@@ -69,6 +70,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'enabled' => 'boolean',
         ]);
 
         $service->update($validated);

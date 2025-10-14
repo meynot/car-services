@@ -65,6 +65,27 @@
                     </div>
                 </div>
 
+                <!-- Enabled Status -->
+                <div class="mt-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" 
+                               name="enabled" 
+                               id="enabled" 
+                               value="1"
+                               {{ old('enabled', true) ? 'checked' : '' }}
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded">
+                        <label for="enabled" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                            {{ __('services.enabled') }}
+                        </label>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        {{ __('services.enabled_help') }}
+                    </p>
+                    @error('enabled')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Form Actions -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-end mt-8">
                     <a href="{{ route('services.index') }}" 

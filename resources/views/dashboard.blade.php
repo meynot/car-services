@@ -9,103 +9,1187 @@
         </p>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+    <!-- Time Period Selector -->
+    <div class="mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+            <div class="flex flex-wrap gap-2">
+                <button onclick="showPeriod('today')" class="period-btn active px-4 py-2 text-sm font-medium rounded-md bg-blue-600 text-white">
+                    {{ __('dashboard.today') }}
+                </button>
+                <button onclick="showPeriod('yesterday')" class="period-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    {{ __('dashboard.yesterday') }}
+                </button>
+                <button onclick="showPeriod('this-week')" class="period-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    {{ __('dashboard.this_week') }}
+                </button>
+                <button onclick="showPeriod('last-week')" class="period-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    {{ __('dashboard.last_week') }}
+                </button>
+                <button onclick="showPeriod('current-month')" class="period-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    {{ __('dashboard.current_month') }}
+                </button>
+                <button onclick="showPeriod('last-month')" class="period-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    {{ __('dashboard.last_month') }}
+                </button>
+                <button onclick="showPeriod('last-3-months')" class="period-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    {{ __('dashboard.last_3_months') }}
+                </button>
+                <button onclick="showPeriod('current-year')" class="period-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    {{ __('dashboard.current_year') }}
+                </button>
+                <button onclick="showPeriod('last-year')" class="period-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    {{ __('dashboard.last_year') }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today Stats -->
+    <div id="today" class="period-stats">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Invoices -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoices_today') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Invoice::whereDate('date', today())->count() }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
-                    <div class="ms-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                {{ __('dashboard.total_invoices') }}
-                            </dt>
-                            <dd class="text-lg font-medium text-gray-900 dark:text-white">
-                                {{ \App\Models\Invoice::count() }}
-                            </dd>
-                        </dl>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoice_total_today') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Invoice::whereDate('date', today())->sum('total_amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-credit-card text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payments_today') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\InvoicePayment::whereDate('date', today())->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-2xl text-emerald-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payment_total_today') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\InvoicePayment::whereDate('date', today())->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-receipt text-2xl text-red-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expenses_today') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Expense::whereDate('date', today())->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-minus-circle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expense_total_today') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Expense::whereDate('date', today())->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+    <!-- Yesterday Stats -->
+    <div id="yesterday" class="period-stats hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Invoices -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoices_yesterday') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Invoice::whereDate('date', today()->subDay())->count() }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
-                    <div class="ms-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                {{ __('dashboard.total_revenue') }}
-                            </dt>
-                            <dd class="text-lg font-medium text-gray-900 dark:text-white">
-                                ${{ number_format(\App\Models\Invoice::sum('total_amount'), 2) }}
-                            </dd>
-                        </dl>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoice_total_yesterday') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Invoice::whereDate('date', today()->subDay())->sum('total_amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-credit-card text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payments_yesterday') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\InvoicePayment::whereDate('date', today()->subDay())->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-2xl text-emerald-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payment_total_yesterday') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\InvoicePayment::whereDate('date', today()->subDay())->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-receipt text-2xl text-red-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expenses_yesterday') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Expense::whereDate('date', today()->subDay())->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-minus-circle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expense_total_yesterday') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Expense::whereDate('date', today()->subDay())->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-clock text-2xl text-yellow-600"></i>
+    <!-- This Week Stats -->
+    <div id="this-week" class="period-stats hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Invoices -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoices_this_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Invoice::whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])->count() }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
-                    <div class="ms-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                {{ __('dashboard.outstanding_invoices') }}
-                            </dt>
-                            <dd class="text-lg font-medium text-gray-900 dark:text-white">
-                                {{ \App\Models\Invoice::whereRaw('total_amount - discount > (SELECT COALESCE(SUM(amount), 0) FROM invoice_payments WHERE invoice_id = invoices.id)')->count() }}
-                            </dd>
-                        </dl>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoice_total_this_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Invoice::whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])->sum('total_amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-credit-card text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payments_this_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\InvoicePayment::whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-2xl text-emerald-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payment_total_this_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\InvoicePayment::whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-receipt text-2xl text-red-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expenses_this_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Expense::whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-minus-circle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expense_total_this_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Expense::whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-tools text-2xl text-purple-600"></i>
+    <!-- Last Week Stats -->
+    <div id="last-week" class="period-stats hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Invoices -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoices_last_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Invoice::whereBetween('date', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()])->count() }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
-                    <div class="ms-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                {{ __('dashboard.total_services') }}
-                            </dt>
-                            <dd class="text-lg font-medium text-gray-900 dark:text-white">
-                                {{ \App\Models\Service::count() }}
-                            </dd>
-                        </dl>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoice_total_last_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Invoice::whereBetween('date', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()])->sum('total_amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-credit-card text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payments_last_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\InvoicePayment::whereBetween('date', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()])->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-2xl text-emerald-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payment_total_last_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\InvoicePayment::whereBetween('date', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()])->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-receipt text-2xl text-red-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expenses_last_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Expense::whereBetween('date', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()])->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-minus-circle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expense_total_last_week') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Expense::whereBetween('date', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()])->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-receipt text-2xl text-red-600"></i>
+    <!-- Current Month Stats -->
+    <div id="current-month" class="period-stats hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Invoices -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoices_this_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Invoice::whereMonth('date', now()->month)->whereYear('date', now()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
-                    <div class="ms-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                {{ __('dashboard.total_expenses') }}
-                            </dt>
-                            <dd class="text-lg font-medium text-gray-900 dark:text-white">
-                                ${{ number_format(\App\Models\Expense::sum('amount'), 2) }}
-                            </dd>
-                        </dl>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoice_total_this_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Invoice::whereMonth('date', now()->month)->whereYear('date', now()->year)->sum('total_amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-credit-card text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payments_this_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\InvoicePayment::whereMonth('date', now()->month)->whereYear('date', now()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-2xl text-emerald-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payment_total_this_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\InvoicePayment::whereMonth('date', now()->month)->whereYear('date', now()->year)->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-receipt text-2xl text-red-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expenses_this_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Expense::whereMonth('date', now()->month)->whereYear('date', now()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-minus-circle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expense_total_this_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Expense::whereMonth('date', now()->month)->whereYear('date', now()->year)->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Last Month Stats -->
+    <div id="last-month" class="period-stats hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Invoices -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoices_last_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Invoice::whereMonth('date', now()->subMonth()->month)->whereYear('date', now()->subMonth()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoice_total_last_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Invoice::whereMonth('date', now()->subMonth()->month)->whereYear('date', now()->subMonth()->year)->sum('total_amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-credit-card text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payments_last_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\InvoicePayment::whereMonth('date', now()->subMonth()->month)->whereYear('date', now()->subMonth()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-2xl text-emerald-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payment_total_last_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\InvoicePayment::whereMonth('date', now()->subMonth()->month)->whereYear('date', now()->subMonth()->year)->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-receipt text-2xl text-red-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expenses_last_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Expense::whereMonth('date', now()->subMonth()->month)->whereYear('date', now()->subMonth()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-minus-circle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expense_total_last_month') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Expense::whereMonth('date', now()->subMonth()->month)->whereYear('date', now()->subMonth()->year)->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Last 3 Months Stats -->
+    <div id="last-3-months" class="period-stats hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Invoices -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoices_last_3_months') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Invoice::where('date', '>=', now()->subMonths(3)->startOfMonth())->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoice_total_last_3_months') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Invoice::where('date', '>=', now()->subMonths(3)->startOfMonth())->sum('total_amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-credit-card text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payments_last_3_months') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\InvoicePayment::where('date', '>=', now()->subMonths(3)->startOfMonth())->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-2xl text-emerald-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payment_total_last_3_months') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\InvoicePayment::where('date', '>=', now()->subMonths(3)->startOfMonth())->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-receipt text-2xl text-red-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expenses_last_3_months') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Expense::where('date', '>=', now()->subMonths(3)->startOfMonth())->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-minus-circle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expense_total_last_3_months') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Expense::where('date', '>=', now()->subMonths(3)->startOfMonth())->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Year Stats -->
+    <div id="current-year" class="period-stats hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Invoices -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoices_this_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Invoice::whereYear('date', now()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoice_total_this_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Invoice::whereYear('date', now()->year)->sum('total_amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-credit-card text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payments_this_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\InvoicePayment::whereYear('date', now()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-2xl text-emerald-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payment_total_this_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\InvoicePayment::whereYear('date', now()->year)->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-receipt text-2xl text-red-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expenses_this_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Expense::whereYear('date', now()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-minus-circle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expense_total_this_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Expense::whereYear('date', now()->year)->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Last Year Stats -->
+    <div id="last-year" class="period-stats hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Invoices -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoices_last_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Invoice::whereYear('date', now()->subYear()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.invoice_total_last_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Invoice::whereYear('date', now()->subYear()->year)->sum('total_amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-credit-card text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payments_last_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\InvoicePayment::whereYear('date', now()->subYear()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave text-2xl text-emerald-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.payment_total_last_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\InvoicePayment::whereYear('date', now()->subYear()->year)->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-receipt text-2xl text-red-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expenses_last_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    {{ \App\Models\Expense::whereYear('date', now()->subYear()->year)->count() }}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-minus-circle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ms-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                                    {{ __('dashboard.expense_total_last_year') }}
+                                </dt>
+                                <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                                    ${{ number_format(\App\Models\Expense::whereYear('date', now()->subYear()->year)->sum('amount'), 2) }}
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -268,4 +1352,26 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function showPeriod(period) {
+            // Hide all period stats
+            document.querySelectorAll('.period-stats').forEach(function(element) {
+                element.classList.add('hidden');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.period-btn').forEach(function(button) {
+                button.classList.remove('active', 'bg-blue-600', 'text-white');
+                button.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            });
+            
+            // Show selected period
+            document.getElementById(period).classList.remove('hidden');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active', 'bg-blue-600', 'text-white');
+            event.target.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+        }
+    </script>
 </x-layouts.app>
