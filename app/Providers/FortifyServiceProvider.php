@@ -23,6 +23,15 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Fortify::loginView(fn () => view('livewire.auth.login'));
+        Fortify::registerView(fn () => view('livewire.auth.register'));
+        Fortify::requestPasswordResetLinkView(fn () => view('livewire.auth.forgot-password'));
+        Fortify::resetPasswordView(fn (Request $request) => view('livewire.auth.reset-password', ['request' => $request]));
+        Fortify::verifyEmailView(fn () => view('livewire.auth.verify-email'));
         Fortify::confirmPasswordView(fn () => view('livewire.auth.confirm-password'));
+
+        RateLimiter::for('login', function (Request $request) {
+            return Limit::perMinute(5)->by($request->email.$request->ip());
+        });
     }
 }
