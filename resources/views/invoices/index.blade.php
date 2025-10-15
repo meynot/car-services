@@ -115,10 +115,12 @@
                                            class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
                                             <i class="fas fa-eye"></i>
                                         </a>
+                                        @if($invoice->total_paid < 1 )
                                         <a href="{{ route('invoices.edit', $invoice) }}" 
                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                             <i class="fas fa-edit"></i>
                                         </a>
+
                                         <form method="POST" action="{{ route('invoices.destroy', $invoice) }}" 
                                               class="inline" 
                                               onsubmit="return confirm('{{ __('invoice.confirm_delete') }}')">
@@ -129,6 +131,16 @@
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
+                                        @else
+                                        <span 
+                                            class="text-indigo-300 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                            <i class="fas fa-edit"></i>
+                                        </span>
+                                        <span 
+                                            class="text-indigo-300 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                            <i class="fas fa-trash"></i>
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

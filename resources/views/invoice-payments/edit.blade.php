@@ -15,7 +15,7 @@
 
     <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
         <div class="px-4 py-5 sm:p-6">
-            <form method="POST" action="{{ route('invoice-payments.update', $payment) }}">
+            <form method="POST" action="{{ route('invoice-payments.update', $invoicePayment) }}">
                 @csrf
                 @method('PUT')
 
@@ -35,7 +35,7 @@
                                         data-total="{{ $invoice->total_after_discount }}"
                                         data-paid="{{ $invoice->amount_paid }}"
                                         data-remaining="{{ $invoice->remaining_balance }}"
-                                        {{ old('invoice_id', $payment->invoice_id) == $invoice->id ? 'selected' : '' }}>
+                                        {{ old('invoice_id', $invoicePayment->invoice_id) == $invoice->id ? 'selected' : '' }}>
                                     #{{ $invoice->id }} - {{ $invoice->client_name }} 
                                     ({{ __('invoice.remaining_balance') }}: ${{ number_format($invoice->remaining_balance, 2) }})
                                 </option>
@@ -53,7 +53,7 @@
                         <input type="date" 
                                name="date" 
                                id="date" 
-                               value="{{ old('date', $payment->date->format('Y-m-d')) }}"
+                               value="{{ old('date', $invoicePayment->date->format('Y-m-d')) }}"
                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                required>
                         @error('date')
@@ -70,7 +70,7 @@
                                id="amount" 
                                step="0.01" 
                                min="0.01"
-                               value="{{ old('amount', $payment->amount) }}"
+                               value="{{ old('amount', $invoicePayment->amount) }}"
                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                required>
                         <p id="max-amount-text" class="mt-1 text-sm text-gray-500 dark:text-gray-400 hidden">
@@ -90,13 +90,13 @@
                                 class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 required>
                             <option value="">{{ __('payments.select_method') }}</option>
-                            <option value="cash" {{ old('payment_method', $payment->payment_method->value) == 'cash' ? 'selected' : '' }}>
+                            <option value="cash" {{ old('payment_method', $invoicePayment->payment_method->value) == 'cash' ? 'selected' : '' }}>
                                 {{ __('payments.cash') }}
                             </option>
-                            <option value="visa" {{ old('payment_method', $payment->payment_method->value) == 'visa' ? 'selected' : '' }}>
+                            <option value="visa" {{ old('payment_method', $invoicePayment->payment_method->value) == 'visa' ? 'selected' : '' }}>
                                 {{ __('payments.visa') }}
                             </option>
-                            <option value="bank_transfer" {{ old('payment_method', $payment->payment_method->value) == 'bank_transfer' ? 'selected' : '' }}>
+                            <option value="bank_transfer" {{ old('payment_method', $invoicePayment->payment_method->value) == 'bank_transfer' ? 'selected' : '' }}>
                                 {{ __('payments.bank_transfer') }}
                             </option>
                         </select>
@@ -141,7 +141,7 @@
 
                 <!-- Form Actions -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-end mt-8">
-                    <a href="{{ route('invoices.show', $payment->invoice) }}" 
+                    <a href="{{ route('invoices.show', $invoicePayment->invoice) }}" 
                        class="inline-flex items-center justify-center px-4 py-2 bg-gray-300 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-500 focus:bg-gray-400 dark:focus:bg-gray-500 active:bg-gray-500 dark:active:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                         <i class="fas fa-times me-2"></i>
                         {{ __('payments.cancel') }}

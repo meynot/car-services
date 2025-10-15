@@ -13,6 +13,12 @@ return [
     'recent_expenses' => 'Recent Expenses',
     'no_expenses_yet' => 'No expenses recorded yet',
     
+    // Export functionality
+    'export_invoices' => 'Export Invoices',
+    'export_payments' => 'Export Payments',
+    'export_expenses' => 'Export Expenses',
+    'export_all' => 'Export All Data',
+    
     // Time period selectors
     'today' => 'Today',
     'yesterday' => 'Yesterday',

@@ -13,6 +13,12 @@ return [
     'recent_expenses' => 'Gastos Recientes',
     'no_expenses_yet' => 'No se han registrado gastos aún',
     
+    // Export functionality
+    'export_invoices' => 'Exportar Facturas',
+    'export_payments' => 'Exportar Pagos',
+    'export_expenses' => 'Exportar Gastos',
+    'export_all' => 'Exportar Todos los Datos',
+    
     // Time period selectors
     'today' => 'Hoy',
     'yesterday' => 'Ayer',

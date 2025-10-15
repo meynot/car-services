@@ -4,6 +4,7 @@ return [
     'title' => 'Facturas',
     'create' => 'Crear Nueva Factura',
     'edit' => 'Editar Factura',
+    'cannot_edit_paid' => 'No se puede editar factura pagada',
     'show' => 'Ver Factura',
     'client_name' => 'Nombre del Cliente',
     'phone' => 'Teléfono',

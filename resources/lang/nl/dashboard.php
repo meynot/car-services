@@ -13,6 +13,12 @@ return [
     'recent_expenses' => 'Recente Uitgaven',
     'no_expenses_yet' => 'Nog geen uitgaven geregistreerd',
     
+    // Export functionality
+    'export_invoices' => 'Facturen Exporteren',
+    'export_payments' => 'Betalingen Exporteren',
+    'export_expenses' => 'Uitgaven Exporteren',
+    'export_all' => 'Alle Gegevens Exporteren',
+    
     // Time period selectors
     'today' => 'Vandaag',
     'yesterday' => 'Gisteren',

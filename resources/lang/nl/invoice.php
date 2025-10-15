@@ -4,6 +4,7 @@ return [
     'title' => 'Facturen',
     'create' => 'Nieuwe Factuur Aanmaken',
     'edit' => 'Factuur Bewerken',
+    'cannot_edit_paid' => 'Betaalde factuur kan niet worden bewerkt',
     'show' => 'Factuur Bekijken',
     'client_name' => 'Klantnaam',
     'phone' => 'Telefoon',

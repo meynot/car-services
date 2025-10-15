@@ -4,6 +4,7 @@ return [
     'title' => 'Invoices',
     'create' => 'Create New Invoice',
     'edit' => 'Edit Invoice',
+    'cannot_edit_paid' => 'Cannot Edit Paid Invoice',
     'show' => 'View Invoice',
     'client_name' => 'Client Name',
     'phone' => 'Phone',

@@ -12,14 +12,17 @@
             </div>
             <div class="mt-4 sm:mt-0">
                 <div class="flex space-x-2">
-                    @if($invoice->payments->count() > 0)
-
+                    @if($invoice->is_fully_paid)
+                        <span class="inline-flex items-center px-4 py-2 bg-gray-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest cursor-not-allowed">
+                            <i class="fas fa-lock me-2"></i>
+                            {{ __('invoice.cannot_edit_paid') }}
+                        </span>
                     @else
-                    <a href="{{ route('invoices.edit', $invoice) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                        <i class="fas fa-edit me-2"></i>
-                        {{ __('invoice.edit') }}
-                    </a>
+                        <a href="{{ route('invoices.edit', $invoice) }}" 
+                           class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                            <i class="fas fa-edit me-2"></i>
+                            {{ __('invoice.edit') }}
+                        </a>
                     @endif
                     @if($invoice->remaining_balance > 0)
                         <a href="{{ route('invoice-payments.create', ['invoice_id' => $invoice->id, 'amount' => $invoice->remaining_balance]) }}" 

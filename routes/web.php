@@ -38,6 +38,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('services', App\Http\Controllers\ServiceController::class);
     Route::resource('invoice-payments', App\Http\Controllers\InvoicePaymentController::class);
     Route::resource('expenses', App\Http\Controllers\ExpenseController::class);
+    
+    // Export Routes
+    Route::prefix('export')->name('export.')->group(function () {
+        Route::get('invoices', [App\Http\Controllers\ExportController::class, 'exportInvoices'])->name('invoices');
+        Route::get('payments', [App\Http\Controllers\ExportController::class, 'exportPayments'])->name('payments');
+        Route::get('expenses', [App\Http\Controllers\ExportController::class, 'exportExpenses'])->name('expenses');
+        Route::get('all', [App\Http\Controllers\ExportController::class, 'exportAll'])->name('all');
+    });
 });
 
 require __DIR__.'/auth.php';

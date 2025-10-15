@@ -80,8 +80,14 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Invoice $invoice): View
+    public function edit(Invoice $invoice): View|RedirectResponse
     {
+        // Prevent editing fully paid invoices
+        if ($invoice->is_fully_paid) {
+            return redirect()->route('invoices.show', $invoice)
+                ->with('error', __('invoice.cannot_edit_paid'));
+        }
+
         $services = Service::enabled()->get();
         $invoice->load('items');
         return view('invoices.edit', compact('invoice', 'services'));
@@ -92,6 +98,12 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice): RedirectResponse
     {
+        // Prevent updating fully paid invoices
+        if ($invoice->is_fully_paid) {
+            return redirect()->route('invoices.show', $invoice)
+                ->with('error', __('invoice.cannot_edit_paid'));
+        }
+
         $validated = $request->validate([
             'client_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',

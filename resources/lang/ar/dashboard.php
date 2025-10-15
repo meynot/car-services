@@ -13,6 +13,12 @@ return [
     'recent_expenses' => 'المصروفات الأخيرة',
     'no_expenses_yet' => 'لم يتم تسجيل مصروفات بعد',
     
+    // Export functionality
+    'export_invoices' => 'تصدير الفواتير',
+    'export_payments' => 'تصدير المدفوعات',
+    'export_expenses' => 'تصدير المصروفات',
+    'export_all' => 'تصدير جميع البيانات',
+    
     // Time period selectors
     'today' => 'اليوم',
     'yesterday' => 'أمس',

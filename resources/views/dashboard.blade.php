@@ -12,6 +12,31 @@
     <!-- Time Period Selector -->
     <div class="mb-6">
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-3 sm:p-4">
+            <!-- Export Buttons -->
+            <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                    <button onclick="exportData('invoices')" 
+                            class="inline-flex items-center px-3 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                        <i class="fas fa-file-excel me-2"></i>
+                        {{ __('dashboard.export_invoices') }}
+                    </button>
+                    <button onclick="exportData('payments')" 
+                            class="inline-flex items-center px-3 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                        <i class="fas fa-credit-card me-2"></i>
+                        {{ __('dashboard.export_payments') }}
+                    </button>
+                    <button onclick="exportData('expenses')" 
+                            class="inline-flex items-center px-3 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                        <i class="fas fa-receipt me-2"></i>
+                        {{ __('dashboard.export_expenses') }}
+                    </button>
+                    <button onclick="exportData('all')" 
+                            class="inline-flex items-center px-3 py-2 bg-purple-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-700 focus:bg-purple-700 active:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                        <i class="fas fa-download me-2"></i>
+                        {{ __('dashboard.export_all') }}
+                    </button>
+                </div>
+            </div>
             <!-- Mobile: Single column with full-width buttons -->
             <div class="block sm:hidden space-y-2">
                 <div class="grid grid-cols-2 gap-2">
@@ -1431,7 +1456,11 @@
     </div>
 
     <script>
+        let currentPeriod = 'today';
+        
         function showPeriod(period) {
+            currentPeriod = period;
+            
             // Hide all period stats
             document.querySelectorAll('.period-stats').forEach(function(element) {
                 element.classList.add('hidden');
@@ -1449,6 +1478,19 @@
             // Add active class to clicked button
             event.target.classList.add('active', 'bg-blue-600', 'text-white');
             event.target.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+        }
+        
+        function exportData(type) {
+            const url = new URL(`/export/${type}`, window.location.origin);
+            url.searchParams.append('period', currentPeriod);
+            
+            // Create a temporary link to trigger download
+            const link = document.createElement('a');
+            link.href = url.toString();
+            link.download = '';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </x-layouts.app>
