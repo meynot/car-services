@@ -71,6 +71,14 @@
                                         {{ __('expenses.title') }}
                                     </a>
                                 </li>
+                                @if(auth()->user()->isAdmin())
+                                <li>
+                                    <a href="{{ route('users.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('users.*') ? 'bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700' }}">
+                                        <i class="fas fa-users h-6 w-6 shrink-0"></i>
+                                        {{ __('users.title') }}
+                                    </a>
+                                </li>
+                                @endif
                             </ul>
                         </li>
                         <li class="mt-auto">
@@ -243,6 +251,12 @@
                     <i class="fas fa-receipt text-xl mb-1"></i>
                     <span class="text-xs">{{ __('expenses.title') }}</span>
                 </a>
+                @if(auth()->user()->isAdmin())
+                <a href="{{ route('users.index') }}" class="flex flex-col items-center py-2 px-3 {{ request()->routeIs('users.*') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">
+                    <i class="fas fa-users text-xl mb-1"></i>
+                    <span class="text-xs">{{ __('users.title') }}</span>
+                </a>
+                @endif
             </div>
         </div>
 

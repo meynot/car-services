@@ -7,12 +7,29 @@
         <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
             {{ __('dashboard.welcome_message') }}
         </p>
+        @if(auth()->user()->isGuest())
+        <div class="mt-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded dark:bg-yellow-900 dark:border-yellow-600 dark:text-yellow-300">
+            <i class="fas fa-info-circle me-2"></i>
+            {{ __('dashboard.guest_access_message') }}
+        </div>
+        @endif
+        
+        @if(auth()->user()->isAdmin())
+        <div class="mt-4">
+            <a href="{{ route('users.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-purple-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-700 focus:bg-purple-700 active:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                <i class="fas fa-users me-2"></i>
+                {{ __('users.manage_users') }}
+            </a>
+        </div>
+        @endif
     </div>
 
     <!-- Time Period Selector -->
     <div class="mb-6">
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-3 sm:p-4">
             <!-- Export Buttons -->
+            @if(!auth()->user()->isGuest())
             <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <button onclick="exportData('invoices')" 
@@ -37,6 +54,7 @@
                     </button>
                 </div>
             </div>
+            @endif
             <!-- Mobile: Single column with full-width buttons -->
             <div class="block sm:hidden space-y-2">
                 <div class="grid grid-cols-2 gap-2">
@@ -162,7 +180,7 @@
                                     {{ __('dashboard.invoices_today') }}
                                 </dt>
                                 <dd class="text-sm sm:text-base lg:text-lg font-medium text-gray-900 dark:text-white">
-                                    {{ \App\Models\Invoice::whereDate('date', today())->count() }}
+                                    {{ auth()->user()->isGuest() ? 0 : \App\Models\Invoice::whereDate('date', today())->count() }}
                                 </dd>
                             </dl>
                         </div>
@@ -182,7 +200,7 @@
                                     {{ __('dashboard.invoice_total_today') }}
                                 </dt>
                                 <dd class="text-sm sm:text-base lg:text-lg font-medium text-gray-900 dark:text-white">
-                                    ${{ number_format(\App\Models\Invoice::whereDate('date', today())->sum('total_amount'), 2) }}
+                                    ${{ number_format(auth()->user()->isGuest() ? 0 : \App\Models\Invoice::whereDate('date', today())->sum('total_amount'), 2) }}
                                 </dd>
                             </dl>
                         </div>
@@ -203,7 +221,7 @@
                                     {{ __('dashboard.payments_today') }}
                                 </dt>
                                 <dd class="text-sm sm:text-base lg:text-lg font-medium text-gray-900 dark:text-white">
-                                    {{ \App\Models\InvoicePayment::whereDate('date', today())->count() }}
+                                    {{ auth()->user()->isGuest() ? 0 : \App\Models\InvoicePayment::whereDate('date', today())->count() }}
                                 </dd>
                             </dl>
                         </div>
@@ -223,7 +241,7 @@
                                     {{ __('dashboard.payment_total_today') }}
                                 </dt>
                                 <dd class="text-sm sm:text-base lg:text-lg font-medium text-gray-900 dark:text-white">
-                                    ${{ number_format(\App\Models\InvoicePayment::whereDate('date', today())->sum('amount'), 2) }}
+                                    ${{ number_format(auth()->user()->isGuest() ? 0 : \App\Models\InvoicePayment::whereDate('date', today())->sum('amount'), 2) }}
                                 </dd>
                             </dl>
                         </div>
@@ -244,7 +262,7 @@
                                     {{ __('dashboard.expenses_today') }}
                                 </dt>
                                 <dd class="text-sm sm:text-base lg:text-lg font-medium text-gray-900 dark:text-white">
-                                    {{ \App\Models\Expense::whereDate('date', today())->count() }}
+                                    {{ auth()->user()->isGuest() ? 0 : \App\Models\Expense::whereDate('date', today())->count() }}
                                 </dd>
                             </dl>
                         </div>
@@ -264,7 +282,7 @@
                                     {{ __('dashboard.expense_total_today') }}
                                 </dt>
                                 <dd class="text-sm sm:text-base lg:text-lg font-medium text-gray-900 dark:text-white">
-                                    ${{ number_format(\App\Models\Expense::whereDate('date', today())->sum('amount'), 2) }}
+                                    ${{ number_format(auth()->user()->isGuest() ? 0 : \App\Models\Expense::whereDate('date', today())->sum('amount'), 2) }}
                                 </dd>
                             </dl>
                         </div>
@@ -1299,6 +1317,7 @@
     </div>
 
     <!-- Recent Invoices and Expenses -->
+    @if(!auth()->user()->isGuest())
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Recent Invoices -->
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
@@ -1454,6 +1473,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <script>
         let currentPeriod = 'today';

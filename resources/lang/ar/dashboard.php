@@ -2,6 +2,7 @@
 
 return [
     'welcome_message' => 'مرحباً بك في نظام إدارة الفواتير',
+    'guest_access_message' => 'لديك صلاحية ضيف. يمكنك فقط عرض لوحة التحكم بدون الوصول للبيانات.',
     'total_invoices' => 'إجمالي الفواتير',
     'total_revenue' => 'إجمالي الإيرادات',
     'outstanding_invoices' => 'الفواتير المستحقة',

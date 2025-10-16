@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,6 +45,54 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the available roles
+     */
+    public static function getRoles(): array
+    {
+        return ['admin', 'user', 'editor', 'client', 'guest'];
+    }
+
+    /**
+     * Check if user has a specific role
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    /**
+     * Check if user is admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Check if user is editor
+     */
+    public function isEditor(): bool
+    {
+        return $this->hasRole('editor');
+    }
+
+    /**
+     * Check if user is client
+     */
+    public function isClient(): bool
+    {
+        return $this->hasRole('client');
+    }
+
+    /**
+     * Check if user is guest
+     */
+    public function isGuest(): bool
+    {
+        return $this->hasRole('guest');
     }
 
     /**

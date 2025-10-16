@@ -10,6 +10,7 @@
                     {{ __('expenses.manage_expenses') }}
                 </p>
             </div>
+            @if(!auth()->user()->hasRole('user'))
             <div class="mt-4 sm:mt-0">
                 <a href="{{ route('expenses.create') }}" 
                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
@@ -17,6 +18,7 @@
                     {{ __('expenses.create') }}
                 </a>
             </div>
+            @endif
         </div>
     </div>
 
@@ -112,7 +114,7 @@
                                            class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        @if(!$expense->is_confirmed)
+                                        @if(!$expense->is_confirmed && !auth()->user()->isEditor() && !auth()->user()->hasRole('user'))
                                             <a href="{{ route('expenses.edit', $expense) }}" 
                                                class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                 <i class="fas fa-edit"></i>

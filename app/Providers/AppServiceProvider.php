@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -35,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
                 'currentLocale' => $currentLocale,
                 'isRTL' => in_array($currentLocale, ['ar']),
             ]);
+        });
+
+        // Blade directive for guest data restriction
+        Blade::directive('guestData', function ($expression) {
+            return "<?php echo auth()->user()->isGuest() ? 0 : ($expression); ?>";
         });
     }
 }

@@ -50,4 +50,6 @@ return [
     'no_payments_yet' => 'No payments recorded yet',
     'edit_invoice' => 'Edit invoice information',
     'total_calculated_from_items' => 'Total calculated from all items',
+    'description' => 'Description',
+    'description_placeholder' => 'Enter item description (optional)',
 ];

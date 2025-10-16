@@ -16,12 +16,14 @@ class Invoice extends Model
         'date',
         'total_amount',
         'discount',
+        'description',
     ];
 
     protected $casts = [
         'date' => 'date',
         'total_amount' => 'decimal:2',
         'discount' => 'decimal:2',
+        'description' => 'string',
     ];
 
     /**
@@ -70,6 +72,14 @@ class Invoice extends Model
     public function getIsFullyPaidAttribute(): bool
     {
         return $this->remaining_balance <= 0;
+    }
+
+    /**
+     * Check if the invoice has payment.
+     */
+    public function getHasPaymentAttribute(): bool
+    {
+        return $this->payments()->sum('amount') > 0;
     }
 
     /**

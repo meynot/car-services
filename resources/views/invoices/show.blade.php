@@ -17,7 +17,7 @@
                             <i class="fas fa-lock me-2"></i>
                             {{ __('invoice.cannot_edit_paid') }}
                         </span>
-                    @else
+                    @elseif(!auth()->user()->isEditor() && !auth()->user()->hasRole('user'))
                         <a href="{{ route('invoices.edit', $invoice) }}" 
                            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                             <i class="fas fa-edit me-2"></i>
@@ -120,6 +120,9 @@
                                         {{ __('invoice.service') }}
                                     </th>
                                     <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        {{ __('invoice.description') }}
+                                    </th>
+                                    <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                         {{ __('invoice.service_price') }}
                                     </th>
                                     <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -136,6 +139,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                                             {{ $item->service->name }}
                                         </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $item->description ?: '-' }}
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                                             ${{ number_format($item->price, 2) }}
                                         </td>
@@ -150,7 +156,7 @@
                             </tbody>
                             <tfoot class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <td colspan="3" class="px-6 py-4 text-end text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    <td colspan="4" class="px-6 py-4 text-end text-sm font-medium text-gray-900 dark:text-gray-100">
                                         {{ __('invoice.total') }}:
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-gray-100">

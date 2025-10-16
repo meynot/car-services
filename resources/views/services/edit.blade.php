@@ -51,6 +51,7 @@
                     <div>
                         <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('services.price') }} <span class="text-red-500">*</span>
+                            @if($service->invoiceItems->count() > 0) <span class="text-gray-500 dark:text-gray-400 text-xs">{{ __('services.price_cannot_be_edited') }}</span> @endif
                         </label>
                         <input type="number" 
                                name="price" 
@@ -58,7 +59,7 @@
                                step="0.01" 
                                min="0"
                                value="{{ old('price', $service->price) }}"
-                               class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                               class="w-full @if($service->invoiceItems->count() > 0) pointer-events-none @endif rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                required>
                         @error('price')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

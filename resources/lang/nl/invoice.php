@@ -43,4 +43,6 @@ return [
     'no_payments_yet' => 'Nog geen betalingen geregistreerd',
     'edit_invoice' => 'Bewerk factuurinformatie',
     'total_calculated_from_items' => 'Totaal berekend van alle items',
+    'description' => 'Beschrijving',
+    'description_placeholder' => 'Voer itembeschrijving in (optioneel)',
 ];

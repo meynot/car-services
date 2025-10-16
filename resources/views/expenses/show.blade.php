@@ -12,11 +12,13 @@
             </div>
             <div class="mt-4 sm:mt-0">
                 <div class="flex space-x-2">
-                    <a href="{{ route('expenses.edit', $expense) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                        <i class="fas fa-edit me-2"></i>
-                        {{ __('expenses.edit') }}
-                    </a>
+                    @if(!auth()->user()->isEditor() && !auth()->user()->hasRole('user'))
+                        <a href="{{ route('expenses.edit', $expense) }}" 
+                           class="inline-flex @if($expense->is_confirmed) cursor-not-allowed pointer-events-none @endif items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                            <i class="fas fa-edit me-2"></i>
+                            {{ __('expenses.edit') }}
+                        </a>
+                    @endif
                     <a href="{{ route('expenses.index') }}" 
                        class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                         <i class="fas fa-arrow-left me-2"></i>
@@ -136,7 +138,7 @@
                 </div>
                 <div class="border-t border-gray-200 dark:border-gray-700 px-4 py-5 sm:px-6">
                     <div class="space-y-3">
-                        @if(!$expense->is_confirmed)
+                        @if(!$expense->is_confirmed && !auth()->user()->isEditor() && !auth()->user()->hasRole('user'))
                             <a href="{{ route('expenses.edit', $expense) }}" 
                                class="w-full inline-flex justify-center items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                 <i class="fas fa-edit me-2"></i>

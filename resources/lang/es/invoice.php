@@ -43,4 +43,6 @@ return [
     'no_payments_yet' => 'No se han registrado pagos aún',
     'edit_invoice' => 'Editar información de la factura',
     'total_calculated_from_items' => 'Total calculado de todos los artículos',
+    'description' => 'Descripción',
+    'description_placeholder' => 'Ingrese descripción del artículo (opcional)',
 ];

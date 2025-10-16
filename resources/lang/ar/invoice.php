@@ -42,4 +42,6 @@ return [
     'no_payments_yet' => 'لم يتم تسجيل مدفوعات بعد',
     'edit_invoice' => 'تعديل معلومات الفاتورة',
     'total_calculated_from_items' => 'المجموع محسوب من جميع البنود',
+    'description' => 'الوصف',
+    'description_placeholder' => 'أدخل وصف العنصر (اختياري)',
 ];

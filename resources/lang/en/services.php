@@ -37,4 +37,5 @@ return [
     'no_description' => 'No description provided',
     'not_used_yet' => 'This service has not been used in any invoices yet',
     'no_services_found' => 'No services found',
+    'price_cannot_be_edited' => 'Price cannot be edited because this service is used in invoices',
 ];

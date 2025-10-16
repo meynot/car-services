@@ -10,6 +10,7 @@
                     {{ __('payments.manage_payments') }}
                 </p>
             </div>
+            @if(!auth()->user()->hasRole('user'))
             <div class="mt-4 sm:mt-0">
                 <a href="{{ route('invoice-payments.create') }}" 
                    class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
@@ -17,6 +18,7 @@
                     {{ __('payments.record_payment') }}
                 </a>
             </div>
+            @endif
         </div>
     </div>
 
@@ -108,20 +110,26 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2">
-                                        <a href="{{ route('invoice-payments.edit', $payment) }}" 
-                                           class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
-                                            <i class="fas fa-edit"></i>
+                                        <a href="{{ route('invoice-payments.show', $payment) }}" 
+                                           class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                                            <i class="fas fa-eye"></i>
                                         </a>
-                                        <form method="POST" action="{{ route('invoice-payments.destroy', $payment) }}" 
-                                              class="inline" 
-                                              onsubmit="return confirm('{{ __('payments.confirm_delete') }}')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        @if(!auth()->user()->isEditor() && !auth()->user()->hasRole('user'))
+                                            <a href="{{ route('invoice-payments.edit', $payment) }}" 
+                                               class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="POST" action="{{ route('invoice-payments.destroy', $payment) }}" 
+                                                  class="inline" 
+                                                  onsubmit="return confirm('{{ __('payments.confirm_delete') }}')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                        class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

@@ -2,6 +2,7 @@
 
 return [
     'welcome_message' => 'Bienvenido a tu sistema de gestión de facturas',
+    'guest_access_message' => 'Tienes acceso de invitado. Solo puedes ver el panel de control sin acceso a datos.',
     'total_invoices' => 'Total de Facturas',
     'total_revenue' => 'Ingresos Totales',
     'outstanding_invoices' => 'Facturas Pendientes',

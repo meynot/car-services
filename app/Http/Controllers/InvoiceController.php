@@ -38,7 +38,7 @@ class InvoiceController extends Controller
     {
         $validated = $request->validate([
             'client_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'nullable|string|max:20',
             'date' => 'required|date',
             'total_amount' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
@@ -46,6 +46,7 @@ class InvoiceController extends Controller
             'items.*.service_id' => 'required|exists:services,id',
             'items.*.price' => 'required|numeric|min:0',
             'items.*.parts_price' => 'nullable|numeric|min:0',
+            'items.*.description' => 'nullable|string',
         ]);
 
         $invoice = Invoice::create([
@@ -61,6 +62,7 @@ class InvoiceController extends Controller
                 'service_id' => $item['service_id'],
                 'price' => $item['price'],
                 'parts_price' => $item['parts_price'] ?? 0,
+                'description' => $item['description'] ?? null,
             ]);
         }
 
@@ -106,7 +108,7 @@ class InvoiceController extends Controller
 
         $validated = $request->validate([
             'client_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'nullable|string|max:20',
             'date' => 'required|date',
             'total_amount' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
@@ -114,6 +116,7 @@ class InvoiceController extends Controller
             'items.*.service_id' => 'required|exists:services,id',
             'items.*.price' => 'required|numeric|min:0',
             'items.*.parts_price' => 'nullable|numeric|min:0',
+            'items.*.description' => 'nullable|string',
         ]);
 
         $invoice->update([
@@ -131,6 +134,7 @@ class InvoiceController extends Controller
                 'service_id' => $item['service_id'],
                 'price' => $item['price'],
                 'parts_price' => $item['parts_price'] ?? 0,
+                'description' => $item['description'] ?? null,
             ]);
         }
 

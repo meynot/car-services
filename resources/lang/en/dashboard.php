@@ -2,6 +2,7 @@
 
 return [
     'welcome_message' => 'Welcome to your invoice management system',
+    'guest_access_message' => 'You have guest access. You can only view the dashboard with no data access.',
     'total_invoices' => 'Total Invoices',
     'total_revenue' => 'Total Revenue',
     'outstanding_invoices' => 'Outstanding Invoices',

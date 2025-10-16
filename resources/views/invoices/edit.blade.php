@@ -45,7 +45,7 @@
                                id="phone" 
                                value="{{ old('phone', $invoice->phone) }}"
                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                               required>
+                               >
                         @error('phone')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -157,6 +157,15 @@
                                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     </div>
                                 </div>
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        {{ __('invoice.description') }}
+                                    </label>
+                                    <textarea name="items[{{ $index }}][description]" 
+                                              rows="2"
+                                              class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                              placeholder="{{ __('invoice.description_placeholder') }}">{{ $item->description }}</textarea>
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -238,6 +247,15 @@
                                value="0"
                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        {{ __('invoice.description') }}
+                    </label>
+                    <textarea name="items[${itemIndex}][description]" 
+                              rows="2"
+                              class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                              placeholder="{{ __('invoice.description_placeholder') }}"></textarea>
                 </div>
             `;
             container.appendChild(newItem);

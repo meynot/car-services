@@ -27,20 +27,32 @@ Route::get('/debug/language', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
+    Route::redirect('settings', 'settings/profile')
+        ->middleware('editor.permissions');
 
-    Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
-    Volt::route('settings/password', 'settings.password')->name('password.edit');
-    Volt::route('settings/appearance', 'settings.appearance')->name('appearance.edit');
+    Volt::route('settings/profile', 'settings.profile')->name('profile.edit')
+        ->middleware('editor.permissions');
+    Volt::route('settings/password', 'settings.password')->name('password.edit')
+        ->middleware('editor.permissions');
+    Volt::route('settings/appearance', 'settings.appearance')->name('appearance.edit')
+        ->middleware('editor.permissions');
+
+    // User Management Routes (Admin Only)
+    Route::resource('users', App\Http\Controllers\UserController::class)
+        ->middleware('admin.only');
 
     // Invoice Management Routes
-    Route::resource('invoices', App\Http\Controllers\InvoiceController::class);
-    Route::resource('services', App\Http\Controllers\ServiceController::class);
-    Route::resource('invoice-payments', App\Http\Controllers\InvoicePaymentController::class);
-    Route::resource('expenses', App\Http\Controllers\ExpenseController::class);
+    Route::resource('invoices', App\Http\Controllers\InvoiceController::class)
+        ->middleware('editor.permissions');
+    Route::resource('services', App\Http\Controllers\ServiceController::class)
+        ->middleware('editor.permissions');
+    Route::resource('invoice-payments', App\Http\Controllers\InvoicePaymentController::class)
+        ->middleware('editor.permissions');
+    Route::resource('expenses', App\Http\Controllers\ExpenseController::class)
+        ->middleware('editor.permissions');
     
     // Export Routes
-    Route::prefix('export')->name('export.')->group(function () {
+    Route::prefix('export')->name('export.')->middleware('editor.permissions')->group(function () {
         Route::get('invoices', [App\Http\Controllers\ExportController::class, 'exportInvoices'])->name('invoices');
         Route::get('payments', [App\Http\Controllers\ExportController::class, 'exportPayments'])->name('payments');
         Route::get('expenses', [App\Http\Controllers\ExportController::class, 'exportExpenses'])->name('expenses');

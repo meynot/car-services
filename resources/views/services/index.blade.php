@@ -116,6 +116,12 @@
                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                        @if($service->invoiceItems->count() > 0)
+                                        <span 
+                                            class="text-red-300 dark:text-red-100">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        @else
                                         <form method="POST" action="{{ route('services.destroy', $service) }}" 
                                               class="inline" 
                                               onsubmit="return confirm('{{ __('services.confirm_delete') }}')">
@@ -126,6 +132,7 @@
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

@@ -2,6 +2,7 @@
 
 return [
     'welcome_message' => 'Welkom bij je factuurbeheersysteem',
+    'guest_access_message' => 'Je hebt gasttoegang. Je kunt alleen het dashboard bekijken zonder toegang tot gegevens.',
     'total_invoices' => 'Totaal Facturen',
     'total_revenue' => 'Totale Omzet',
     'outstanding_invoices' => 'Openstaande Facturen',
